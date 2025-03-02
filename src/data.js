@@ -3,6 +3,10 @@ import {
   IconBraces,
   IconSql,
   IconFileTypeXml,
+  IconNumber,
+  IconPassword,
+  IconSourceCode,
+  IconFocusAuto,
 } from "@tabler/icons-react";
 
 export const tools = [
@@ -34,5 +38,32 @@ export const tools = [
     icon: IconFileTypeXml,
     tags: ["xml", "formatter"],
   },
-  // Add more tools here as needed
+  {
+    id: "uuid-generator",
+    title: "UUID Generator",
+    description: "Generate Unique UUID",
+    icon: IconNumber,
+    tags: ["uuid", "generator"],
+  },
+  {
+    id: "password-generator",
+    title: "Random Password Generator",
+    description: "Generate Unique Random Passwords",
+    icon: IconPassword,
+    tags: ["password", "generator"],
+  },
+  {
+    id: "base64-enc-dec",
+    title: "Base64 Encoder/Decoder",
+    description: "Text -> Base64 Encoder/Decoder -> Text",
+    icon: IconSourceCode,
+    tags: ["encode", "decode"],
+  },
+  {
+    id: "jwt-verify",
+    title: "Verify JWT Token",
+    description: "Verify JWT token credentials",
+    icon: IconFocusAuto,
+    tags: ["jwt", "token", "auth"],
+  },
 ];

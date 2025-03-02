@@ -37,6 +37,7 @@
     "recharts": "^2.15.1",
     "sql-formatter": "^15.4.11",
     "terser": "^5.39.0",
+    "uuid": "^11.1.0",
     "xml-formatter": "^3.6.4"
   },
   "devDependencies": {
