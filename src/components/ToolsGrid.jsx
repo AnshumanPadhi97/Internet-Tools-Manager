@@ -4,6 +4,8 @@ import { tools } from "../data";
 import { useState } from "react";
 import JsonBeautifier from "../tools/JsonBeautifier";
 import JsMinifier from "../tools/JsMinifier";
+import SQLFormatter from "../tools/SQLFormatter";
+import XmlFormatter from "../tools/XmlFormatter";
 
 function ToolsGrid() {
   const [activeTool, setActiveTool] = useState(null);
@@ -18,6 +20,10 @@ function ToolsGrid() {
         return <JsonBeautifier onBack={() => setActiveTool(null)} />;
       case "js-minifier":
         return <JsMinifier onBack={() => setActiveTool(null)} />;
+      case "sql-formatter":
+        return <SQLFormatter onBack={() => setActiveTool(null)} />;
+      case "xml-formatter":
+        return <XmlFormatter onBack={() => setActiveTool(null)} />;
       default:
         return (
           <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="lg">

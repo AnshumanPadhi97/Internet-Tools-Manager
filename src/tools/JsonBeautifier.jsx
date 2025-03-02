@@ -50,7 +50,52 @@ function JsonBeautifier({ onBack }) {
         <Title order={3}>JSON Beautifier</Title>
       </Group>
 
-      <Group mb="md">
+      {error && (
+        <Alert color="red" mb="md">
+          {error}
+        </Alert>
+      )}
+
+      <Grid>
+        <Grid.Col span={{ base: 12, md: 6 }} style={{ height: "100%" }}>
+          <Text weight={500} mb="xs">
+            Input:
+          </Text>
+          <Textarea
+            placeholder="Paste your JSON here..."
+            value={input}
+            onChange={(e) => setInput(e.currentTarget.value)}
+            style={{ height: "calc(100% - 25px)" }}
+            h={250}
+            styles={{
+              wrapper: { height: "100%" },
+              input: { height: "100%", resize: "none" },
+            }}
+          />
+        </Grid.Col>
+
+        <Grid.Col span={{ base: 12, md: 6 }} style={{ height: "100%" }}>
+          <Text weight={500} mb="xs">
+            Output:
+          </Text>
+          <Paper
+            withBorder
+            p="md"
+            h={250}
+            style={{
+              height: "calc(100% - 25px)",
+              overflowY: "auto",
+              backgroundColor: output ? undefined : "rgba(0, 0, 0, 0.03)",
+            }}
+          >
+            <Text component="pre" style={{ whiteSpace: "pre-wrap", margin: 0 }}>
+              {output || "Beautified JSON will appear here"}
+            </Text>
+          </Paper>
+        </Grid.Col>
+      </Grid>
+
+      <Group mt="lg">
         <Button onClick={beautifyJson}>Beautify JSON</Button>
         {output && (
           <CopyButton value={output} timeout={2000}>
@@ -68,56 +113,6 @@ function JsonBeautifier({ onBack }) {
           </CopyButton>
         )}
       </Group>
-
-      {error && (
-        <Alert color="red" mb="md">
-          {error}
-        </Alert>
-      )}
-
-      <div>
-        <Grid>
-          <Grid.Col span={{ base: 12, md: 6 }} style={{ height: "100%" }}>
-            <Text weight={500} mb="xs">
-              Input:
-            </Text>
-            <Textarea
-              placeholder="Paste your JSON here..."
-              value={input}
-              onChange={(e) => setInput(e.currentTarget.value)}
-              style={{ height: "calc(100% - 25px)" }}
-              h={250}
-              styles={{
-                wrapper: { height: "100%" },
-                input: { height: "100%", resize: "none" },
-              }}
-            />
-          </Grid.Col>
-
-          <Grid.Col span={{ base: 12, md: 6 }} style={{ height: "100%" }}>
-            <Text weight={500} mb="xs">
-              Output:
-            </Text>
-            <Paper
-              withBorder
-              p="md"
-              h={250}
-              style={{
-                height: "calc(100% - 25px)",
-                overflowY: "auto",
-                backgroundColor: output ? undefined : "rgba(0, 0, 0, 0.03)",
-              }}
-            >
-              <Text
-                component="pre"
-                style={{ whiteSpace: "pre-wrap", margin: 0 }}
-              >
-                {output || "Beautified JSON will appear here"}
-              </Text>
-            </Paper>
-          </Grid.Col>
-        </Grid>
-      </div>
     </Paper>
   );
 }

@@ -11,9 +11,9 @@ function AppHeader({ activeTab, setActiveTab }) {
             <Tabs.Tab value="tools" leftSection={<IconTools size={16} />}>
               Tools
             </Tabs.Tab>
-            <Tabs.Tab value="snippets" leftSection={<IconCode size={16} />}>
+            {/* <Tabs.Tab value="snippets" leftSection={<IconCode size={16} />}>
               Snippets
-            </Tabs.Tab>
+            </Tabs.Tab> */}
           </Tabs.List>
         </Tabs>
       </Group>

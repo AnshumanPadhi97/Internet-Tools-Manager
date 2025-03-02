@@ -8,46 +8,64 @@ import {
   Text,
   Alert,
   CopyButton,
-  Checkbox,
   Grid,
+  Select,
+  Checkbox,
 } from "@mantine/core";
 import { IconArrowLeft, IconCopy, IconCheck } from "@tabler/icons-react";
-import { minify } from "terser";
+import { format } from "sql-formatter";
 
-function JsMinifier({ onBack }) {
+function SQLFormatter({ onBack }) {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
-  const [isMinifying, setIsMinifying] = useState(false);
+
   const [options, setOptions] = useState({
-    compress: true,
-    mangle: true,
-    format: {
-      comments: false,
-    },
+    language: "sql",
+    keywordCase: "lower",
+    tabWidth: 2,
+    useTabs: false,
   });
 
-  const minifyJs = async () => {
+  const formatSql = () => {
     try {
       if (!input.trim()) {
-        setError("Please enter JavaScript code to minify");
+        setError("Please enter SQL to format");
         setOutput("");
         return;
       }
 
-      setIsMinifying(true);
+      const formattedSql = format(input, options);
+      setOutput(formattedSql);
       setError("");
-
-      // Use Terser for professional minification
-      const result = await minify(input, options);
-
-      setOutput(result.code);
-      setIsMinifying(false);
     } catch (err) {
-      setError("Error minifying JavaScript: " + err.message);
+      setError("Invalid SQL: " + err.message);
       setOutput("");
-      setIsMinifying(false);
     }
+  };
+
+  // Handle indentation style change
+  const handleIndentStyleChange = (value) => {
+    setOptions((prev) => ({
+      ...prev,
+      useTabs: value === "tabs",
+    }));
+  };
+
+  // Handle indentation size change
+  const handleIndentSizeChange = (value) => {
+    setOptions((prev) => ({
+      ...prev,
+      tabWidth: Number(value),
+    }));
+  };
+
+  // Handle checkbox options
+  const handleCheckboxChange = (name, checked) => {
+    setOptions((prev) => ({
+      ...prev,
+      [name]: checked ? "upper" : "lower",
+    }));
   };
 
   return (
@@ -62,7 +80,7 @@ function JsMinifier({ onBack }) {
         </Button>
       </Group>
       <Group mb="md">
-        <Title order={3}>JavaScript Minifier</Title>
+        <Title order={3}>SQL Formatter</Title>
       </Group>
 
       {error && (
@@ -78,11 +96,11 @@ function JsMinifier({ onBack }) {
               Input:
             </Text>
             <Textarea
-              h={250}
-              placeholder="Paste your JavaScript code here..."
+              placeholder="Paste your SQL here..."
               value={input}
               onChange={(e) => setInput(e.currentTarget.value)}
               style={{ height: "calc(100% - 25px)" }}
+              h={250}
               styles={{
                 wrapper: { height: "100%" },
                 input: { height: "100%", resize: "none" },
@@ -108,71 +126,57 @@ function JsMinifier({ onBack }) {
                 component="pre"
                 style={{ whiteSpace: "pre-wrap", margin: 0 }}
               >
-                {output || "Minified JavaScript will appear here"}
+                {output || "Formatted SQL will appear here"}
               </Text>
             </Paper>
           </Grid.Col>
         </Grid>
       </div>
 
-      {output && (
-        <Text size="sm" c="dimmed" mt="md">
-          Original size: {new Blob([input]).size} bytes | Minified size:{" "}
-          {new Blob([output]).size} bytes | Saved:{" "}
-          {(
-            100 -
-            (new Blob([output]).size / new Blob([input]).size) * 100
-          ).toFixed(2)}
-          %
-        </Text>
-      )}
-
       <Group mt="md">
         <Title order={4}>Formatting Options</Title>
       </Group>
 
+      <Grid mt="xs">
+        <Grid.Col span={6}>
+          <Select
+            label="Indentation Style"
+            value={options.useTabs ? "tabs" : "spaces"}
+            onChange={handleIndentStyleChange}
+            data={[
+              { value: "spaces", label: "Spaces" },
+              { value: "tabs", label: "Tabs" },
+            ]}
+          />
+        </Grid.Col>
+
+        <Grid.Col span={6}>
+          <Select
+            label="Indentation Size"
+            value={String(options.tabWidth)}
+            onChange={handleIndentSizeChange}
+            data={[
+              { value: "2", label: "2 spaces" },
+              { value: "4", label: "4 spaces" },
+              { value: "8", label: "8 spaces" },
+            ]}
+            disabled={options.useTabs}
+          />
+        </Grid.Col>
+      </Grid>
+
       <Group mt="md">
         <Checkbox
-          label="Compress code"
-          checked={options.compress}
-          onChange={(event) =>
-            setOptions({
-              ...options,
-              compress: event.currentTarget.checked,
-            })
-          }
-        />
-
-        <Checkbox
-          label="Mangle variable names"
-          checked={options.mangle}
-          onChange={(event) =>
-            setOptions({
-              ...options,
-              mangle: event.currentTarget.checked,
-            })
-          }
-        />
-
-        <Checkbox
-          label="Remove comments"
-          checked={!options.format.comments}
-          onChange={(event) =>
-            setOptions({
-              ...options,
-              format: {
-                ...options.format,
-                comments: !event.currentTarget.checked,
-              },
-            })
+          label="Uppercase SQL keywords"
+          checked={options.uppercase}
+          onChange={(e) =>
+            handleCheckboxChange("keywordCase", e.currentTarget.checked)
           }
         />
       </Group>
-      <Group mt="lg">
-        <Button onClick={minifyJs} loading={isMinifying}>
-          {isMinifying ? "Minifying..." : "Minify JavaScript"}
-        </Button>
 
+      <Group mt="lg">
+        <Button onClick={formatSql}>Format SQL</Button>
         {output && (
           <CopyButton value={output} timeout={2000}>
             {({ copied, copy }) => (
@@ -193,4 +197,4 @@ function JsMinifier({ onBack }) {
   );
 }
 
-export default JsMinifier;
+export default SQLFormatter;

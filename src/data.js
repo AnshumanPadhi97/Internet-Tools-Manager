@@ -1,4 +1,9 @@
-import { IconCode, IconBraces } from "@tabler/icons-react";
+import {
+  IconCode,
+  IconBraces,
+  IconSql,
+  IconFileTypeXml,
+} from "@tabler/icons-react";
 
 export const tools = [
   {
@@ -14,6 +19,20 @@ export const tools = [
     description: "Minify JavaScript code to reduce file size",
     icon: IconCode,
     tags: ["javascript", "minifier"],
+  },
+  {
+    id: "sql-formatter",
+    title: "SQL Formatter",
+    description: "Format SQL code to make it more readable",
+    icon: IconSql,
+    tags: ["sql", "formatter"],
+  },
+  {
+    id: "xml-formatter",
+    title: "XML Formatter",
+    description: "Format XML code to make it more readable",
+    icon: IconFileTypeXml,
+    tags: ["xml", "formatter"],
   },
   // Add more tools here as needed
 ];
